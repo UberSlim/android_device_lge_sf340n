@@ -18,8 +18,45 @@
 set -e
 
 # Required!
-export DEVICE=sf340n
-export DEVICE_COMMON=sd4xx-common
-export VENDOR=lge
+DEVICE=sf340n
+VENDOR=lge
 
-./../../$VENDOR/$DEVICE_COMMON/setup-makefiles.sh $@
+# Load extractutils and do some sanity checks
+MY_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
+
+CM_ROOT="$MY_DIR"/../../..
+
+HELPER="$CM_ROOT"/vendor/cm/build/tools/extract_utils.sh
+if [ ! -f "$HELPER" ]; then
+    echo "Unable to find helper script at $HELPER"
+    exit 1
+fi
+. "$HELPER"
+
+# Initialize the helper
+setup_vendor "$DEVICE" "$VENDOR" "$CM_ROOT"
+
+# Copyright headers and guards
+write_headers
+
+# The standard blobs
+write_makefiles "$MY_DIR"/proprietary-files.txt
+
+# Qualcomm BSP blobs - we put a conditional around here
+# in case the BSP is actually being built
+printf '\n%s\n' "ifeq (\$(QCPATH),)" >> "$PRODUCTMK"
+printf '\n%s\n' "ifeq (\$(QCPATH),)" >> "$ANDROIDMK"
+
+write_makefiles "$MY_DIR"/proprietary-files-qc.txt
+
+printf '\n%s\n' "endif" >> "$PRODUCTMK"
+
+cat << EOF >> "$ANDROIDMK"
+
+\$(shell mkdir -p \$(PRODUCT_OUT)/system/vendor/lib/egl && pushd \$(PRODUCT_OUT)/system/vendor/lib > /dev/null && ln -s egl/libEGL_adreno.so libEGL_adreno.so && popd > /dev/null)
+EOF
+
+printf '\n%s\n' "endif" >> "$ANDROIDMK"
+# We are done!
+write_footers

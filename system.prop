@@ -1,12 +1,14 @@
 # Camera
 camera.hal1.packagelist=com.skype.raider,com.google.android.talk
-
-# properties for limiting preview size in camera
+#properties for limiting preview size in camera
 camera.display.umax=1920x1080
 camera.display.lmax=1280x720
 
 # display
 ro.sf.lcd_density=480
+
+# property to enable fingerprint
+persist.qfp=false
 
 #HWUI properties
 ro.hwui.texture_cache_size=72
@@ -31,5 +33,6 @@ ro.sys.fw.trim_empty_percent=100
 ro.sys.fw.trim_cache_percent=100
 ro.sys.fw.trim_enable_memory=2147483648
 
-# Bluetooth
-ro.bt.bdaddr_path="/data/misc/bluetooth/bdaddr"
+# Audio
+ro.config.vc_call_vol_steps=7
+ro.config.vc_call_vol_default=7

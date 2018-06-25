@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# inherit from common sd4xx-common
-include device/lge/sd4xx-common/BoardConfigCommon.mk
+# inherit from common msm8937
+include device/lge/msm8937-common/BoardConfigCommon.mk
 
 LOCAL_PATH := device/lge/sf340n
 
@@ -31,8 +31,12 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 25597819904
 BOARD_CACHEIMAGE_PARTITION_SIZE := 1291845632
 TARGET_USERIMAGES_USE_EXT4 := true
 
-# Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
+# FM
+BOARD_HAVE_QCOM_FM := true
+TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/fstab.qcom
 
 # NFC
 BOARD_NFC_CHIPSET := pn548

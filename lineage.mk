@@ -17,7 +17,7 @@
 # Inherit framework first
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from ph2n device
+# Inherit from sf340n device
 $(call inherit-product, device/lge/sf340n/device.mk)
 
 # Inherit some common LineageOS stuff.
@@ -30,6 +30,9 @@ PRODUCT_NAME := lineage_sf340n
 PRODUCT_BRAND := lge
 PRODUCT_MODEL := LG Stylo 3 Plus
 PRODUCT_MANUFACTURER := lge
+
+# Overlays (inherit after vendor/cm to ensure we override it)
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 PRODUCT_GMS_CLIENTID_BASE := android-lge
 
